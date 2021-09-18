@@ -1,0 +1,4 @@
+/Users/yianyao/.emacs.d/elpa/vterm-20210908.640/build/CMakeFiles/rebuild_cache.dir
+/Users/yianyao/.emacs.d/elpa/vterm-20210908.640/build/CMakeFiles/edit_cache.dir
+/Users/yianyao/.emacs.d/elpa/vterm-20210908.640/build/CMakeFiles/run.dir
+/Users/yianyao/.emacs.d/elpa/vterm-20210908.640/build/CMakeFiles/vterm-module.dir
