@@ -343,6 +343,15 @@
     ;;   :custom ((dired-listing-switches "-agho --group-directories-first")))
   #+end_src
 
+* Terminal:
+   #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
+     (use-package vterm
+       :ensure t
+       :bind
+       (("C-; v" . vterm)))
+   #+end_src
+  
+
 * Projects and Git
   #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
     ;; projectile
