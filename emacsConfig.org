@@ -5,7 +5,7 @@
 ** Org bable taggle: C-c C-v t
    
 * Basic UI Configuration
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
     ;; Clean up the menu bar
     (setq inhibit-startup-message t)
     (scroll-bar-mode -1) ; disable visible scroll bar
@@ -27,7 +27,7 @@
   #+end_src
 
 * Package Source
-  #+begin_src emacs-lisp 
+  #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el 
     ;; Initialize package sources
     (require 'package)
 
@@ -49,7 +49,7 @@
   #+end_src
 
 * Helm vs Ivy
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
     (use-package ivy
       :diminish
       :bind (("C-s" . swiper))
@@ -77,7 +77,7 @@
   #+end_src
 
 * Fancy UI Configuration
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
     ;; fancy mode line
     (use-package all-the-icons)
     (use-package doom-modeline
@@ -125,7 +125,7 @@
   #+end_src
 
 * Custom Keybindings
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
     ;; Key Bindings
     (global-set-key (kbd "C-x C-o") 'other-window)
     (global-set-key (kbd "s-r") 'revert-buffer)
@@ -165,7 +165,7 @@
   #+end_src
 
 * Latex
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
     ;; latex
     (exec-path-from-shell-initialize)
     (use-package pdf-tools
@@ -178,7 +178,7 @@
   #+end_src
 
 * Org
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
     ;; org
     (use-package org
       :config
@@ -222,7 +222,7 @@
   
 * LSP Mode for IDE
 ** General Setup  
-   #+begin_src emacs-lisp
+   #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
      ;; lsp mode
      (defun yay/lsp-mode-setup ()
        (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -258,7 +258,7 @@
        :hook (company-mode . company-box-mode))
    #+end_src
 ** Python
-   #+begin_src emacs-lisp
+   #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
      (use-package python-mode
        :ensure t
        :hook (python-mode . lsp-deferred)
@@ -289,7 +289,7 @@
    #+end_src
 ** C++
    This is from [[https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/][C++ LSP tutorial]]
-   #+begin_src emacs-lisp
+   #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
      (setq package-selected-packages '(lsp-mode yasnippet lsp-treemacs helm-lsp
 						projectile hydra flycheck company avy which-key helm-xref dap-mode))
 
@@ -323,3 +323,47 @@
      (require 'dap-lldb)
    #+end_src
 
+* File Management
+
+  #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
+    (use-package dired 
+      :ensure nil
+      :commands (dired dired-jump)
+      :bind (("C-x C-j" . dired-jump)))
+      ;;:custom ((dired-listing-switches "-agho --group-directories-first")))
+      ;; :config
+      ;; (evil-collection-define-key 'normal 'dired-mode-map
+      ;; 				  "h" 'dired-single-up-directory
+      ;; 				  "l" 'dired-single-buffer))
+
+    ;; (use-package dired
+    ;;   :ensure nil
+    ;;   :commands (dired dired-jump)
+    ;;   :bind (("C-x C-j" . dired-jump))
+    ;;   :custom ((dired-listing-switches "-agho --group-directories-first")))
+  #+end_src
+
+* Projects and Git
+  #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
+    ;; projectile
+    (use-package projectile
+      :diminish projectile-mode
+      :config (projectile-mode)
+      :custom ((projectile-completion-system 'ivy))
+      :bind-keymap
+      ("C-c p" . projectile-command-map))
+
+    (use-package counsel-projectile
+      :config (counsel-projectile-mode))
+
+    ;; git
+    (use-package magit)
+  #+end_src  
+
+
+* Others
+** Arduino
+   #+begin_src emacs-lisp :tangle ~/.emacs.d/init.el
+     ;; ardurio to C++ mode
+     (add-to-list 'auto-mode-alist '("\\.ino\\'" . c++-mode))
+   #+end_src
