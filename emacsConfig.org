@@ -1,0 +1,184 @@
+#+TITLE: Configuration
+#+PROPERTY: header-args.emacs-list :tangle ~/.emacs.d/init.el
+
+* Before Everything:
+** Org bable taggle: C-c C-v t
+   
+* Basic UI Configuration
+  #+begin_src emacs-lisp
+    ;; Clean up the menu bar
+    (setq inhibit-startup-message t)
+    (scroll-bar-mode -1) ; disable visible scroll bar
+    (tool-bar-mode -1) ; disable toolbar
+    (tooltip-mode -1) ; disable tooltips
+    (set-fringe-mode 10) ; give some breathing room
+    ;; toggle full screen
+    (set-frame-parameter nil 'fullscreen 'fullboth)
+    (menu-bar-mode -1) ; disable menubar
+    (load-theme 'tango-dark t)
+    ;;(set-face-attribute 'default nil :font "monaco" :height 125)
+    (set-face-attribute 'default nil :height 125)
+
+    ;; disable line numbers for some mode
+    (dolist (mode '(vterm-mode-hook
+		    treemacs-mode-hook
+		    shell-mode-hook))
+      (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  #+end_src
+
+* Package Source
+  #+begin_src emacs-lisp 
+    ;; Initialize package sources
+    (require 'package)
+
+    (setq package-archives '(("melpa" . "http://melpa.org/packages/")
+			     ("org" . "https://orgmode.org/elpa/") ;; update org in time
+			     ("gnu" . "http://elpa.gnu.org/packages/");; I am using this mirror to test spinner 1.7
+			     ("elpa" . "https://elpa.gnu.org/packages"))) 
+
+    (package-initialize)
+    (unless package-archive-contents
+      (package-refresh-contents))
+
+    ;; Initialize use-package on non-Linux platforms
+    (unless (package-installed-p 'use-package)
+      (package-install 'use-package))
+
+    (require 'use-package)
+    (setq use-package-always-ensure t)
+  #+end_src
+
+* Helm vs Ivy
+  #+begin_src emacs-lisp
+    (use-package ivy
+      :diminish
+      :bind (("C-s" . swiper))
+      :config
+      (setq ivy-use-virtual-buffers t
+	    ivy-count-format "%d/%d ")
+      (ivy-mode 1))
+    (use-package ivy-rich
+      :init
+      (ivy-rich-mode 1))
+    (use-package counsel
+      :bind (("M-x" . counsel-M-x)
+	     ("C-x b" . counsel-ibuffer)
+	     ("C-x C-f" . counsel-find-file)
+	     :map minibuffer-local-map
+	     ("C-r" . 'counsel-minibuffer-history))
+      :config
+      (setq ivy-initial-inputs-alist nil)) ;; don't start searches with ^
+    ;; (use-package helm
+    ;;   :demand t
+    ;;   :bind ("M-x" . helm-M-x)
+    ;;   :config (helm-mode 1)
+    ;;   )
+    ;; (setq helm-display-function 'helm-display-buffer-in-own-frame)
+  #+end_src
+
+* Fancy UI Configuration
+  #+begin_src emacs-lisp
+    ;; fancy mode line
+    (use-package all-the-icons)
+    (use-package doom-modeline
+      :ensure t
+      :init (doom-modeline-mode 1)
+      :custom ((doom-modeline-height 10)))
+
+    ;; fancy theme
+    ;;(use-package doom-themes)
+
+    ;; line numbers
+    (column-number-mode)
+    (global-display-line-numbers-mode t)
+    ;; Disable line numbers for some modes:
+    (dolist (mode '(org-mode-hook
+		    term-mode-hook
+		    eshell-mode-hook
+		    shell-mode-hook))
+      (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+    ;; rainbow in programming
+    (use-package rainbow-delimiters
+      :hook (prog-mode . rainbow-delimiters-mode))
+
+    ;; which key
+    (use-package which-key
+      :init (which-key-mode)
+      :diminish which-key-mode
+      :config
+      (setq which-key-idle-delay 0.2))
+    (global-set-key (kbd "C-h f") #'helpful-callable)
+
+    (global-set-key (kbd "C-h v") #'helpful-variable)
+    (global-set-key (kbd "C-h k") #'helpful-key)
+    ;; ;; better emacs help
+    ;; (use-package helpful
+    ;;   :custom
+    ;;   (counsel-describe-function-function #'helpful-callable)
+    ;;   (counsel-describe-function-function #'helpful-variable)
+    ;;   :bind
+    ;;   ([remap describe-function] . counsel-describe-function)
+    ;;   ([remap describe-command] . helpful-command)
+    ;;   ([remap describe-variable] . counsel-describe-variable)
+    ;;   ([remap describe-key] . helpful-key))
+  #+end_src
+
+* Custom Keybindings
+  #+begin_src emacs-lisp
+    ;; Key Bindings
+    (global-set-key (kbd "C-x C-o") 'other-window)
+    (global-set-key (kbd "s-r") 'revert-buffer)
+
+    (global-set-key (kbd "C-; s") 'shell)
+
+    (global-set-key (kbd "C-; h") 'windmove-left)
+    (global-set-key (kbd "C-; l") 'windmove-right)
+    (global-set-key (kbd "C-; j") 'windmove-down)
+    (global-set-key (kbd "C-; k") 'windmove-up)
+
+    (global-set-key (kbd "C-; b") 'previous-buffer)
+    (global-set-key (kbd "C-; f") 'next-buffer)
+
+    (defun split-vertical-evenly ()
+      (interactive)
+      (command-execute 'split-window-vertically)
+      (command-execute 'balance-windows))
+    (global-set-key (kbd "C-x 2") 'split-vertical-evenly)
+
+    (defun split-horizontal-evenly ()
+      (interactive)
+      (command-execute 'split-window-horizontally)
+      (command-execute 'balance-windows))
+    (global-set-key (kbd "C-x 3") 'split-horizontal-evenly)
+    ;; Hydra
+    ;; auto pair
+    (electric-pair-mode 1)
+    (setq electric-pair-pairs
+	  '(
+	    (?\{ . ?\})))
+
+    ;; Better comment
+    (use-package evil-nerd-commenter	
+      :bind ("M-;" . evilnc-comment-or-uncomment-lines))
+
+  #+end_src
+
+* Latex
+  #+begin_src emacs-lisp
+    ;; latex
+    (exec-path-from-shell-initialize)
+    (use-package pdf-tools
+      :ensure t
+      :config
+      (custom-set-variables
+       '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
+      (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+    (pdf-tools-install)
+
+    ;; ;; Some setups for C++
+    ;; auto complete
+    (use-package auto-complete)
+    (global-auto-complete-mode 1)
+  #+end_src
+

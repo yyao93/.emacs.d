@@ -1,0 +1,8 @@
+#+TITLE: Configuration
+#+PROPERTY: header-args.emacs-list :tangle ~/.emacs.d/init.el
+
+* Before Everything:
+** Org bable taggle: C-c C-v t
+   
+* Basic UI Configuration
+
