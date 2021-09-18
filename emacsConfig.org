@@ -179,5 +179,42 @@
 
 * Org
   #+begin_src emacs-lisp
+    ;; org
+    (use-package org
+      :config
+      (setq org-agenda-files '("~/Org/Birthday.org"))
+      (setq org-agenda-files '("~/Org/Task.org")))
+    (use-package org-fancy-priorities
+      :ensure t
+      :hook
+      (org-mode . org-fancy-priorities-mode)
+      :config
+      (setq org-fancy-priorities-list '("↯↯††:" "↯↯† :" "↯ ††:" "↯ † :")))
 
+    (require 'org-bullets)
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+    (global-set-key (kbd "C-c a") 'org-agenda)
+    (global-set-key (kbd "C-c c") 'org-capture)
+
+					    ; the clock history across Emacs Session
+    (setq org-clock-persist 'history)
+    (org-clock-persistence-insinuate)
+
+    (setq org-default-notes-file (concat org-directory "~/Org/Task.org"))
+    (setq org-html-html5-fancy t
+	  org-html-doctype "html5")
+
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (shell . t)
+       (python . t)))
+    (setq org-confirm-babel-evaluate nil) ;; not confirm before evaluate
+
+					    ; auto complete some environment in emacs
+    (require 'org-tempo)
+    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("py" . "src python"))
   #+end_src
