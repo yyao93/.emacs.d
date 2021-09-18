@@ -197,7 +197,7 @@
     (global-set-key (kbd "C-c a") 'org-agenda)
     (global-set-key (kbd "C-c c") 'org-capture)
 
-					    ; the clock history across Emacs Session
+    ;; the clock history across Emacs Session
     (setq org-clock-persist 'history)
     (org-clock-persistence-insinuate)
 
@@ -212,7 +212,7 @@
        (python . t)))
     (setq org-confirm-babel-evaluate nil) ;; not confirm before evaluate
 
-					    ; auto complete some environment in emacs
+    ;; auto complete some environment in emacs
     (require 'org-tempo)
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
